@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
+
+:root {
+    --surface: #1e1e2f;
+    --primary: #f0f0f0;
+    --accent: #4caf50;
+    --muted: #888;
+    --danger: #e74c3c;
+}
+
+#popup-root {
+  background: rgba(30, 30, 47, 0.85); 
+  border-radius: 18px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(10px);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+body {
+    width: 340px;
+    padding: 28px 20px 20px 20px;
+    font-family: "Segoe UI", 'Roboto', sans-serif;
+    background-color: var(--surface);
+    color: var(--primary);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.18);
+}
+
+h3 {
+    margin: 0 0 18px 0;
+    font-size: 1.7rem;
+    font-family: 'Satisfy', cursive, 'Segoe UI', 'Roboto', cursive;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 18px;
+    margin-right: 10px;
+    background-color: rgba(255, 255, 255, 0.07);
+    color: var(--primary);
+    border: 1.5px solid rgba(255, 255, 255, 0.13);
+    border-radius: 10px;
+    padding: auto 10px;
+    font-family: "Satisfy", cursive;
+    resize: none;
+    font-size: 15px;
+    box-sizing: border-box;
+    transition: border-color 0.2s, background-color 0.2s;
+    font-family: 'Segoe UI', 'Roboto', sans-serif;
+    width: 100%;
+}
+a{
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+    transition: color 0.2s;
+    background-color: var(--primary);
+    border: 1px solid #4caf50;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+button {
+    width: 100%;
+    padding: 13px;
+    margin-top: 10px;
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+    font-size: 15px;
+    box-shadow: 0 1px 4px 0 rgba(76,175,80,0.10);
+}
+
+button:hover {
+    background-color: #43a047;
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+#savedMissions {
+    background-color: rgba(255, 255, 255, 0.07);
+    border: 1.5px solid rgba(255, 255, 255, 0.13);
+    color: var(--primary);
+}
+
+#savedMissions:hover {
+    background-color: rgba(255, 255, 255, 0.13);
+}
+
+#missionList {
+    margin-top: 16px;
+    list-style: none;
+    padding: 0;
+    max-height: 180px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+#missionList::-webkit-scrollbar {
+    width: 8px;
+}
+#missionList::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+#missionList::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+#missionList li {
+    font-size: 14px;
+    padding: 12px 14px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.07) 0%, rgba(76,175,80,0.07) 100%);
+    border-radius: 10px;
+    transition: background-color 0.2s;
+    color: var(--primary);
+    box-shadow: 0 1px 4px 0 rgba(76,175,80,0.10);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+#missionList li:hover {
+    background: linear-gradient(90deg, rgba(255,255,255,0.13) 0%, rgba(76,175,80,0.13) 100%);
+}
+
+a {
+    display: block;
+    margin-top: 18px;
+    text-align: center;
+    color: var(--accent);
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 15px;
+    transition: color 0.2s;
+    font-family: 'Satisfy', cursive, 'Segoe UI', 'Roboto', cursive;
+}
+
+a:hover {
+    color: #43a047;
+}
