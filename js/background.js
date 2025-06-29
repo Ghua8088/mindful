@@ -1,7 +1,8 @@
-
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+const API = (typeof browser !== "undefined") ? browser :
+            (typeof chrome !== "undefined") ? chrome :
+            {};
+API.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (!msg?.type) return;
-
   switch (msg.type) {
 
     case "SAVE_MISSION":
@@ -31,8 +32,8 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         if (recurring) {
           alarmOptions.periodInMinutes = delay / 60000;
         }
-        chrome.alarms.create(alarmId, alarmOptions);
-        chrome.notifications.create({
+        API.alarms.create(alarmId, alarmOptions);
+        API.notifications.create({
           type: 'basic',
           iconUrl: 'icon128.png',
           title: '⏰ Reminder Set',
@@ -40,25 +41,25 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
           priority: 1
         });
       }
-      chrome.storage.local.get(["missions"], (res) => {
+      API.storage.local.get(["missions"], (res) => {
         let missions = res.missions || [];
         missions = missions.filter(m => m.url !== url);
         missions.push(newMission);
-        chrome.storage.local.set({ missions }, () => {
+        API.storage.local.set({ missions }, () => {
           sendResponse({ success: true });
         });
       });
       return true;
 
     case "DELETE_MISSION":
-      chrome.storage.local.get(["missions"], (res) => {
+      API.storage.local.get(["missions"], (res) => {
         const missions = res.missions || [];
         const toDelete = missions.find(m => m.url === msg.url);
         const updated = missions.filter(m => m.url !== msg.url);
         if (toDelete?.alarmId) {
-          chrome.alarms.clear(toDelete.alarmId);
+          API.alarms.clear(toDelete.alarmId);
         }
-        chrome.storage.local.set({ missions: updated }, () => {
+        API.storage.local.set({ missions: updated }, () => {
           sendResponse({ success: true });
         });
         
@@ -66,7 +67,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       return true;
 
     case "UPDATE_MISSION":
-      chrome.storage.local.get(["missions"], (res) => {
+      API.storage.local.get(["missions"], (res) => {
         let missions = res.missions || [];
         missions = missions.map(m => {
           if (m.url === msg.url) {
@@ -79,14 +80,15 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
           }
           return m;
         });
-        chrome.storage.local.set({ missions }, () => {
+        API.storage.local.set({ missions }, () => {
           sendResponse({ success: true });
         });
       });
       return true;
     case "OPEN_DASHBOARD":
-      chrome.tabs.create({ url: chrome.runtime.getURL("Dashboard.html") });
+      API.tabs.create({ url: API.runtime.getURL("Dashboard.html") });
       return true;
+    case "GET_MISSIONS":
     default:
       console.warn("Unknown message type:", msg.type);
       break;
@@ -138,7 +140,7 @@ const remainderCheck = (str) => {
     };
   }
   if (str.includes('@')) {
-    chrome.notifications.create({
+    API.notifications.create({
       type: 'basic',
       iconUrl: 'icon128.png',
       title: 'Mindful Reminder Format',
@@ -149,13 +151,13 @@ const remainderCheck = (str) => {
   return false;
 };
 //Listener
-chrome.alarms.onAlarm.addListener((alarm) => {
+API.alarms.onAlarm.addListener((alarm) => {
   console.log('⏰ Alarm triggered:', alarm.name);
-  chrome.storage.local.get(['missions'], (res) => {
+  API.storage.local.get(['missions'], (res) => {
     const mission = (res.missions || []).find(m => m.alarmId === alarm.name);
     if (!mission) return;
-    chrome.tabs.create({ url: mission.url });
-    chrome.notifications.create({
+    API.tabs.create({ url: mission.url });
+    API.notifications.create({
       type: 'basic',
       iconUrl: 'icon128.png',
       title: 'Mindful Reminder',

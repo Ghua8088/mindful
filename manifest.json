@@ -3,7 +3,7 @@
   "name": "Mindful",
   "version": "1.0",
   "description": "Your mindful mission companion",
-  "permissions": ["storage", "scripting", "tabs", "activeTab", "webNavigation","alarms","notifications"],
+  "permissions": ["storage", "tabs", "activeTab", "webNavigation","alarms","notifications"],
   "host_permissions": ["<all_urls>"],
 
   "background": {
@@ -17,8 +17,14 @@
       "run_at": "document_idle"
     }
   ],
-
+  "web_accessible_resources": [
+    {
+      "resources": ["icon128.png"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "action": {
+    "default_title": "Mindful – Open your mission panel",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icon16.png",

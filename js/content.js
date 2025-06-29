@@ -3,7 +3,7 @@ let alreadyLoaded = false;
 const observer = new MutationObserver(() => {
     if (alreadyLoaded || document.getElementById('mindfulNote')) return;
     if (!document.getElementById('mindful-search-panel')) {
-        chrome.storage.local.get("missions", (res) => {
+        API.storage.local.get("missions", (res) => {
             if (!res || !res.missions) return;
             const missions = res.missions || [];
             const match = missions.find(m => m.url === window.location.href);
@@ -110,10 +110,6 @@ const observer = new MutationObserver(() => {
                 closeBtn.addEventListener('click', () => {
                     
                     noteBox.remove();
-                    /*chrome.runtime.sendMessage({
-                        type: 'DELETE_MISSION',
-                        url: window.location.href
-                    });*/
                     Call("DELETE_MISSION", { url: window.location.href }, (response) => {
                         if (response.success) {
                             console.log("Mission deleted successfully");
@@ -160,13 +156,6 @@ const observer = new MutationObserver(() => {
                                 console.error("Failed to update mission:", response.reason);
                             }
                         });
-                        /*chrome.runtime.sendMessage({
-                            type: 'UPDATE_MISSION',
-                            url: window.location.href,
-                            note: match.note,
-                            xpos: x,
-                            ypos: y
-                        });*/
                     }
                 });
 
@@ -179,13 +168,6 @@ const observer = new MutationObserver(() => {
                     if (newNote && newNote !== match.note) {
                         match.note = newNote;
                         text.textContent = newNote;
-                        /*chrome.runtime.sendMessage({
-                            type: 'UPDATE_MISSION',
-                            url: window.location.href,
-                            note: newNote,
-                            xpos: parseInt(noteBox.style.left || '100', 10),
-                            ypos: parseInt(noteBox.style.top || '100', 10)
-                        });*/
                         const data ={
                             url: window.location.href,
                             note: newNote,
@@ -313,7 +295,6 @@ window.addEventListener('keydown', function(e) {
                     console.error("Failed to open dashboard:", response.reason);
                 }
             });
-            /*chrome.runtime.sendMessage({ type: "OPEN_DASHBOARD" });*/
         });
         
         Object.assign(DashBoard.style, {
@@ -336,18 +317,24 @@ window.addEventListener('keydown', function(e) {
         panel.appendChild(DashBoard);
         
         function renderList() {
-            chrome.storage.local.get(['missions'], function(result) {
+            API.storage.local.get(['missions'], function(result) {
                 const missions = result.missions || [];
                 const val = search.value.toLowerCase();
                 list.innerHTML = '';
                 let foundCurrent = false;
                 missions.filter(m => !val || m.note.toLowerCase().includes(val) || m.url.toLowerCase().includes(val)).forEach(mission => {
                     if (mission.url === window.location.href) foundCurrent = true;
+                    
                     const li = document.createElement('li');
-                    Object.assign(li.style, { backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: '7px', padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: '2px' });
+                    
+                    Object.assign(li.style, { backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: '7px', padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: '2px',scrollbarWidth: "thin",
+            scrollbarColor: "#4caf50 #1e1e2f" });
                     const note = document.createElement('div');
-                    note.textContent = mission.note;
-                    Object.assign(note.style, { color: '#fff', fontSize: '15px', fontWeight: '500' });
+                    const alarm = document.createElement('div');
+                    alarm.textContent = mission.alarm ? "🔔" : "🔕";
+                    Object.assign(alarm.style, { color: '#fff', fontSize: '15px', fontWeight: '500', marginLeft: 'auto' });
+                    note.appendChild(alarm);
+                    note.appendChild(document.createTextNode(mission.note));
                     const url = document.createElement('div');
                     url.textContent = mission.url;
                     Object.assign(url.style, { color: '#8bc34a', fontSize: '12px', wordBreak: 'break-all' });

@@ -64,6 +64,7 @@ a{
     font-weight: 700;
     font-size: 15px;
     transition: color 0.2s;
+    border-radius: 10px;
     background-color: var(--primary);
     border: 1px solid #4caf50;
     padding: 10px;

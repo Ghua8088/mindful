@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    chrome.storage.local.get(["missions"], (result) => {
+    API.storage.local.get(["missions"], (result) => {
         const missions = result.missions || [];
         const missionList = document.getElementById("missionList");
         missionList.innerHTML = "";
@@ -11,14 +11,22 @@ document.addEventListener("DOMContentLoaded", function() {
             li.style.alignItems = "center";
             const link = document.createElement("a");
             
-            if(mission.alarm){
-                const alarmContainer = document.createElement("div");
-                const alarmDetails = mission.alarmConfig;
-                if (alarmDetails.recurring) {
-                    alarmContainer.textContent ="🔃"
+            if (mission.alarm) {
+                li.classList.add("has-alarm");
 
-                }
-                li.appendChild(alarmContainer);
+                const alarmWrapper = document.createElement("div");
+                alarmWrapper.className = "alarm-icon-wrapper";
+                alarmWrapper.title = `This mission has an alarm${mission.alarmConfig?.recurring ? " (recurring)" : ""}`;
+
+                const alarmDot = document.createElement("div");
+                alarmDot.className = "alarm-dot";
+
+                const alarmRings = document.createElement("div");
+                alarmRings.className = "alarm-rings";
+
+                alarmWrapper.appendChild(alarmDot);
+                alarmWrapper.appendChild(alarmRings);
+                li.appendChild(alarmWrapper);
             }
             link.href = mission.url;
             link.target = "_blank";

@@ -4,7 +4,7 @@ document.getElementById("saveBtn").addEventListener("click", () => {
     alert("Please enter a mission!");
     return;
   }
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+  API.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     const url = tabs[0].url;
     const data ={
       url: url,
@@ -23,9 +23,9 @@ document.getElementById("saveBtn").addEventListener("click", () => {
 });
 
 function renderMissions() {
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+  API.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     const url = tabs[0].url;
-    chrome.storage.local.get(["missions"], (result) => {
+    API.storage.local.get(["missions"], (result) => {
       const missions = result.missions || [];
       const missionList = document.getElementById("missionList");
       missionList.innerHTML = "";
@@ -43,13 +43,6 @@ function renderMissions() {
           editBtn.onclick = () => {
             const newNote = prompt("Edit your mission:", mission.note);
             if (newNote && newNote !== mission.note) {
-              /*chrome.runtime.sendMessage({
-                type: "UPDATE_MISSION",
-                url: mission.url,
-                note: newNote,
-                xpos: mission.xpos,
-                ypos: mission.ypos
-              }, renderMissions);*/
               const data ={
                 url: mission.url,
                 note: newNote,
@@ -66,10 +59,6 @@ function renderMissions() {
           delBtn.textContent = "🗑️";
           delBtn.onclick = () => {
             if (confirm("Delete this mission?")) {
-              /*chrome.runtime.sendMessage({
-                type: "DELETE_MISSION",
-                url: mission.url
-              }, renderMissions);*/
               Call("DELETE_MISSION", { url: mission.url }, renderMissions);
             }
           };
